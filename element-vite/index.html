@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -10,15 +10,16 @@
     />
     <script src="//cdn.jsdelivr.net/npm/vue@3"></script>
     <script src="//cdn.jsdelivr.net/npm/element-plus"></script>
+    <script src="//cdn.jsdelivr.net/npm/@element-plus/icons-vue"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
   <body>
-    asdasd
     <div id="app">
-      <el-button @click="countIncrease()">{{ message }}</el-button>
-      <p>{{ counter }}</p>
+      <Edit style="width: 1em; height: 1em; margin-right: 8px" />
+
+      <el-calendar v-model="value" />
     </div>
     <script type="module" src="/main.js"></script>
     <script>
@@ -26,12 +27,13 @@
         data() {
           return {
             message: "Hello Element Plus",
-            counter: 0,
+            size: 10,
+            value: new Date(),
           };
         },
-        methods: {
-          countIncrease() {
-            this.counter++;
+        watch: {
+          size(to, from) {
+            console.log(this.size);
           },
         },
       };
@@ -39,5 +41,13 @@
       app.use(ElementPlus);
       app.mount("#app");
     </script>
+    <style>
+      .alignment-container {
+        width: 240px;
+        margin-bottom: 20px;
+        padding: 8px;
+        border: 1px solid var(--el-border-color);
+      }
+    </style>
   </body>
 </html>
