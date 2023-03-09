@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+<script src="//unpkg.com/vue@3"></script>
+<script src="//unpkg.com/element-plus"></script>
+<script src="//cdn.jsdelivr.net/npm/@element-plus/icons-vue"></script>
+<div id="jiraContainer">
+  <div class="test">asdasd</div>
+  <el-collapse>
+          <el-collapse-item name="1">
+              <template #title>
+                <el-icon size="30" style="width: 30px;">
+                  <Eleme />
+                </el-icon> Jira
+              </template>
+<el-row>
+  <el-col :span="12"><div class="grid-content ep-bg-purple"><el-button type="primary">Primary</el-button></div>
+</el-col>
+  <el-col :span="12"><div class="grid-content ep-bg-purple-light"><el-button type="primary">Primary</el-button></div>
+</el-col>
+</el-row>
+    </el-collapse-item>
+
+  </el-collapse>
+  
+</div>
+<script>
+HDE.on("ready", function () {
+  let { plugin, ticketData, formType } = HDE.getState();
+  const App = {
+    data() {
+      return {
+        count: 4,
+      };
+    },
+    mounted() {
+      console.log(this.count);
+    },
+  };
+  const app = Vue.createApp(App);
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
+  app.use(ElementPlus);
+  app.mount("#jiraContainer");
+  const jiraPlugin = document.querySelector('#jiraContainer');
+  const ticketModules = window.parent.document.querySelectorAll('.ticket-modules');
+  jiraPlugin.querySelector('.el-collapse-item__arrow').style.width = '15px';
+  ticketModules[ticketModules.length - 1].prepend(jiraPlugin)
+  HDE.emit("setPlugin", plugin);
+});
+</script>
+<style type="text/css" scoped>
+.test {
+  height: 50px;
+  width: 50px;
+  background-color: blue;
+}
+</style>
