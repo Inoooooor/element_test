@@ -2,9 +2,15 @@
 <script src="//unpkg.com/vue@3"></script>
 <script src="//unpkg.com/element-plus"></script>
 <script src="//cdn.jsdelivr.net/npm/@element-plus/icons-vue"></script>
+<div class="test">asdasd</div>
 <div id="jiraContainer">
-  <div class="test">asdasd</div>
   <el-collapse>
+    <component :is="'style'">
+      .el-collapse-item__arrow { 
+      	width: 15px;
+      }
+      
+    </component>
           <el-collapse-item name="1">
               <template #title>
                 <el-icon size="30" style="width: 30px;">
@@ -12,11 +18,18 @@
                 </el-icon> Jira
               </template>
 <el-row>
-  <el-col :span="12"><div class="grid-content ep-bg-purple"><el-button type="primary">Primary</el-button></div>
+  <el-col :span="12">
+    <div class="grid-content ep-bg-purple" style="display: flex;justify-content: center;">
+    	<button >Primary</button>
+    </div>
 </el-col>
-  <el-col :span="12"><div class="grid-content ep-bg-purple-light"><el-button type="primary">Primary</el-button></div>
+  <el-col :span="12">
+    <div class="grid-content ep-bg-purple-light" style="display: flex;justify-content: center;">
+      <el-button type="primary">Primary</el-button>
+    </div>
 </el-col>
 </el-row>
+     	<el-row class="bruh dashed">asda</el-row>
     </el-collapse-item>
 
   </el-collapse>
@@ -29,6 +42,19 @@ HDE.on("ready", function () {
     data() {
       return {
         count: 4,
+        testStyles: {
+          backgroundColor: 'red',
+          color: 'white',
+          borderRadius: '5px'
+        },
+                    footerStyles:{
+                backgroundColor: 'black',
+                color: 'white',
+                height: '200px',
+                textAlign: 'center',
+                padding: '5rem'
+            }
+
       };
     },
     mounted() {
@@ -43,15 +69,11 @@ HDE.on("ready", function () {
   app.mount("#jiraContainer");
   const jiraPlugin = document.querySelector('#jiraContainer');
   const ticketModules = window.parent.document.querySelectorAll('.ticket-modules');
-  jiraPlugin.querySelector('.el-collapse-item__arrow').style.width = '15px';
-  ticketModules[ticketModules.length - 1].prepend(jiraPlugin)
-  HDE.emit("setPlugin", plugin);
+  //jiraPlugin.querySelector('.el-collapse-item__arrow').style.width = '15px';
+  const test = document.querySelector('.test');
+  ticketModules[ticketModules.length - 1].prepend(jiraPlugin, test)
+  //HDE.emit("setPlugin", plugin);
 });
 </script>
-<style type="text/css" scoped>
-.test {
-  height: 50px;
-  width: 50px;
-  background-color: blue;
-}
+<style type="text/css">
 </style>
