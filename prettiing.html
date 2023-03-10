@@ -2,78 +2,166 @@
 <script src="//unpkg.com/vue@3"></script>
 <script src="//unpkg.com/element-plus"></script>
 <script src="//cdn.jsdelivr.net/npm/@element-plus/icons-vue"></script>
-<div class="test">asdasd</div>
-<div id="jiraContainer">
-  <el-collapse>
-    <component :is="'style'">
-      .el-collapse-item__arrow { 
-      	width: 15px;
-      }
-      
-    </component>
-          <el-collapse-item name="1">
-              <template #title>
-                <el-icon size="30" style="width: 30px;">
-                  <Eleme />
-                </el-icon> Jira
-              </template>
-<el-row>
-  <el-col :span="12">
-    <div class="grid-content ep-bg-purple" style="display: flex;justify-content: center;">
-    	<button >Primary</button>
-    </div>
-</el-col>
-  <el-col :span="12">
-    <div class="grid-content ep-bg-purple-light" style="display: flex;justify-content: center;">
-      <el-button type="primary">Primary</el-button>
-    </div>
-</el-col>
-</el-row>
-     	<el-row class="bruh dashed">asda</el-row>
-    </el-collapse-item>
 
-  </el-collapse>
+<div id="jiraContainer">
+    <component :is="'style'">
+  #jiraContainer .el-collapse-item__arrow {
+    width: 15px;
+  }
+  .buttontest {
+    background-color: red;
+  }
+  #jiraContainer p {
+    background-color: blue;
+  }
+  #jiraContainer .placeholder {
+    border-top: 2px dashed #cccccc;
+    border-bottom: 2px dashed #cccccc;
+    color: #575762;
+    margin-top: 10px;
+    padding: 5px 0;
+  }
+  #jiraContainer .create-task {
+    cursor: pointer;
+    background-color: white;
+    color: #5293c7;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #5293c7;
+    border-radius: 5px;
+  }
+  #jiraContainer .create-task:hover {
+    background-color: #5293c7;
+    color: white;
+  }
+      
+    #jiraContainer .create-form-jira {
+      position: absolute;
+      right: 35vw;
+      top: 20vh;
+      width: 400px;
+      height: 500px;
+      background-color: #CCCCCC;
+      z-index: 1050;
+      }
+    </component>
+  <div v-if="isCreateFormActive" class="create-form-jira">
+  </div>
+  <el-collapse>
   
+    <el-collapse-item name="1">
+      <template #title>
+        <svg
+          height="20px"
+          preserveAspectRatio="xMidYMid"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 -30.632388516510233 255.324 285.95638851651023"
+        >
+          <linearGradient id="a">
+            <stop offset=".18" stop-color="#0052cc" />
+            <stop offset="1" stop-color="#2684ff" />
+          </linearGradient>
+          <linearGradient
+            id="b"
+            x1="98.031%"
+            x2="58.888%"
+            xlink:href="#a"
+            y1=".161%"
+            y2="40.766%"
+          />
+          <linearGradient
+            id="c"
+            x1="100.665%"
+            x2="55.402%"
+            xlink:href="#a"
+            y1=".455%"
+            y2="44.727%"
+          />
+          <path
+            d="M244.658 0H121.707a55.502 55.502 0 0 0 55.502 55.502h22.649V77.37c.02 30.625 24.841 55.447 55.466 55.467V10.666C255.324 4.777 250.55 0 244.658 0z"
+            fill="#2684ff"
+          />
+          <path
+            d="M183.822 61.262H60.872c.019 30.625 24.84 55.447 55.466 55.467h22.649v21.938c.039 30.625 24.877 55.43 55.502 55.43V71.93c0-5.891-4.776-10.667-10.667-10.667z"
+            fill="url(#b)"
+          />
+          <path
+            d="M122.951 122.489H0c0 30.653 24.85 55.502 55.502 55.502h22.72v21.867c.02 30.597 24.798 55.408 55.396 55.466V133.156c0-5.891-4.776-10.667-10.667-10.667z"
+            fill="url(#c)"
+          />
+        </svg>
+        JIRA
+      </template>
+      <el-row>
+        <el-col :span="12">
+          <div
+            class="grid-content ep-bg-purple"
+            style="display: flex; justify-content: center"
+          >
+            <button @click="changeFormState()" class="create-task">Создать задачи</button>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div
+            class="grid-content ep-bg-purple-light"
+            style="display: flex; justify-content: center"
+          >
+            <button class="create-task">Связать задачи</button>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row class="bruh dashed">
+        <div v-if="tasksAmount === 0" class="placeholder">
+          нет доступных заявок
+        </div>
+      </el-row>
+    </el-collapse-item>
+  </el-collapse>
 </div>
 <script>
-HDE.on("ready", function () {
-  let { plugin, ticketData, formType } = HDE.getState();
-  const App = {
-    data() {
-      return {
-        count: 4,
-        testStyles: {
-          backgroundColor: 'red',
-          color: 'white',
-          borderRadius: '5px'
-        },
-                    footerStyles:{
-                backgroundColor: 'black',
-                color: 'white',
-                height: '200px',
-                textAlign: 'center',
-                padding: '5rem'
-            }
+  HDE.on("ready", function () {
+    let { plugin, ticketData, formType } = HDE.getState();
+    const App = {
+      data() {
+        return {
+          tasksAmount: 0,
+          count: 4,
+          isCreateFormActive: 0,
+            name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
 
-      };
-    },
-    mounted() {
-      console.log(this.count);
-    },
-  };
-  const app = Vue.createApp(App);
-  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
-  app.use(ElementPlus);
-  app.mount("#jiraContainer");
-  const jiraPlugin = document.querySelector('#jiraContainer');
-  const ticketModules = window.parent.document.querySelectorAll('.ticket-modules');
-  //jiraPlugin.querySelector('.el-collapse-item__arrow').style.width = '15px';
-  const test = document.querySelector('.test');
-  ticketModules[ticketModules.length - 1].prepend(jiraPlugin, test)
-  //HDE.emit("setPlugin", plugin);
-});
+        };
+      },
+      mounted() {
+        console.log(this.count);
+      },
+      methods: {
+        changeFormState() {
+          this.isCreateFormActive = !this.isCreateFormActive;
+        console.log(this.isCreateFormActive);
+        }
+      }
+    };
+    const app = Vue.createApp(App);
+    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+      app.component(key, component);
+    }
+    app.use(ElementPlus);
+    app.mount("#jiraContainer");
+    const jiraPlugin = document.querySelector("#jiraContainer");
+    const ticketModules =
+      window.parent.document.querySelectorAll(".ticket-modules");
+    //jiraPlugin.querySelector('.el-collapse-item__arrow').style.width = '15px';
+    ticketModules[ticketModules.length - 1].prepend(jiraPlugin);
+    //HDE.emit("setPlugin", plugin);
+  });
 </script>
-<style type="text/css">
-</style>
+<style type="text/css"></style>
